@@ -1,7 +1,8 @@
 from posixpath import split
 import json
 from colorama import Fore, Style
-
+import requests
+from pyjsonq import JsonQ
 
 
 
@@ -206,8 +207,29 @@ def based_on_fridge_recipes():
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Option 2 - Not done yet:
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-def core_ingredients_recipes():
-  pass
+def main_ingredient_recipes():
+    main_ingredient = input("Please enter the main ingredient for example 'chicken breast' ")
+    api_url = "https://www.themealdb.com/api/json/v1/1/filter.php?i=" + main_ingredient.replace(" ", "_")
+    response_content = requests.get(api_url).json()
+    meals_dict = {}
+    if type(response_content['meals']) is list:
+        meals = response_content['meals']
+        counter = 1
+        print(f"You can cook the following meals using the entered main ingredient : {main_ingredient}")
+        for meal in meals:
+            print(f'{counter}: {meal["strMeal"]}')
+            meals_dict[counter] = meal['idMeal']
+            counter = counter + 1
+        meal_choice = input("Please enter the meal index (like 1, 2, 3) to see its recipe: ")
+        # print(f"User selected: {meals_dict[int(meal_choice)]}")
+        recipe = JsonQ('Recipes.json').at('Recipes').where('idMeal', '=', meals_dict[int(meal_choice)]).get()
+        recipe_dict = recipe[0]
+
+        del recipe_dict['Id']
+        del recipe_dict['idMeal']
+
+        for key, value in recipe_dict.items():
+            print(key, ' : ', value)
 
 
 
