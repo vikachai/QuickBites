@@ -3,6 +3,8 @@ import json
 from colorama import Fore, Style
 
 
+
+
 #Getting recipes data from json file:
 with open('Recipes.json', "r", encoding='utf-8') as f:
     recipes_json = json.load(f)
@@ -36,17 +38,54 @@ def match_recipes_list_to_the_user_list_UserOption1(a_user_list):
     dict_to_offer[i+1] = list_to_offer[i]
   return dict_to_offer
 
-#Storing input(products in a user's fridge) in a list
-#Formating this list
+#Function to take new kitchen kontent input
+def take_NEW_kitchen_content():
+    input_values = input("what's cookin, good lookin. what's edable in your kitchen?"+Fore.BLUE+"(format: ingredients,separeted by comma)\n\n" + Fore.GREEN)
+    print(Style.RESET_ALL)
+    with open('Kitchen_content.txt', 'w') as f:
+      f.write(input_values)
+    input_values = input_values.lower().split(",")
+    formated_input_values = [i.strip() for i in input_values] + ['salt','pepper','oil', 'vinegar', 'water']
+    return formated_input_values
+
+#Function to take previous or edited kitchen kontent output
 def take_user_input_UserOption1():
-    while True:
-      input_values = input("what's cookin, good lookin. what's edable in your kitchen? \n\n" + Fore.GREEN)
-      print(Style.RESET_ALL)
-      if not input_values :
-        continue
+  with open('Kitchen_content.txt') as f:
+    content = f.read()
+  if len(content) == 0:
+    return take_NEW_kitchen_content()
+  else:
+    kitchen_content = input("To provide new kitchen content ->Press 'n'\nTo use kitchen content from the previous time ->Press 'p'\nTo edit previous kitchen kontent ->Press 'e \nTo quit ->Press 'q'\n\n"+Fore.GREEN)
+    print(Style.RESET_ALL)
+    if kitchen_content == 'n' or kitchen_content =="N":
+      return take_NEW_kitchen_content()
+    elif kitchen_content == 'p' or kitchen_content =="P":
+      with open('Kitchen_content.txt') as f:
+        content = f.read()
+      input_values = content  
       input_values = input_values.lower().split(",")
       formated_input_values = [i.strip() for i in input_values] + ['salt','pepper','oil', 'vinegar', 'water']
       return formated_input_values
+    elif kitchen_content == 'e' or kitchen_content =="E":
+      with open('Kitchen_content.txt') as f:
+        content = f.read()
+      input_values = content 
+      print("Here is what you had before:\n\n")
+      print(input_values)
+      edited_kitchen_content = input("\n\nProvide your edited kitchen content\n\n"+Fore.GREEN)
+      print(Style.RESET_ALL)
+      with open('Kitchen_content.txt', 'w') as f:
+        f.write(edited_kitchen_content)
+      input_values = edited_kitchen_content.lower().split(",")
+      formated_input_values = [i.strip() for i in input_values] + ['salt','pepper','oil', 'vinegar', 'water']
+      return formated_input_values
+    elif kitchen_content == 'q' or kitchen_content =="Q":
+      print("\n Come back soon!\n\n")
+      exit()
+    else:
+      take_user_input_UserOption1()
+
+
 
 # When there are no results for a user, he/she can run the program again
 def try_again():
@@ -55,7 +94,8 @@ def try_again():
   if input_try_again == 'y' or input_try_again == 'Y':
       _main_()
   elif input_try_again == 'q' or input_try_again == 'Q':
-    return print("\n Come back soon!\n\n")
+    print("\n Come back soon!\n\n")
+    exit()
   else:
     print("\n Please, follow the instructions:\n\n")
     try_again()
@@ -119,7 +159,7 @@ def take_input_recipe_from_user():
 
 
 ###Function Checking with a user if the provided data by him is correct:
-def Check_input_with_user(user_input):
+def Check_input_with_user_and_store_it(user_input):
     print(Fore.BLUE + "---------------------------------------------------------------------------------------------------"+Style.RESET_ALL)
     for key, value in user_input.items():
       print(f"\n {Fore.MAGENTA}{key}:{Style.RESET_ALL} {value}")
@@ -136,13 +176,15 @@ def Check_input_with_user(user_input):
       return
     else: 
       print("\n Please, follow the instructions:")
-      Check_input_with_user(user_input)
+      Check_input_with_user_and_store_it(user_input)
 
 ####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Option 1 :
+####-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ##Not done yet - to add an option to choose a category?
 def based_on_fridge_recipes():
-  output = match_recipes_list_to_the_user_list_UserOption1(take_user_input_UserOption1())
+  input = take_user_input_UserOption1() 
+  output = match_recipes_list_to_the_user_list_UserOption1(input)
   if(len(output) == 0):
     print("\n really! that's all?? look in your cabinets! THIS IS NOT ENOUGH!")
     try_again()  
@@ -161,21 +203,30 @@ def based_on_fridge_recipes():
       print(Style.RESET_ALL)
 
   
-
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Option 2 - Not done yet:
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def core_ingredients_recipes():
   pass
 
+
+
+
+
+####----------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Option 3:
+####----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Adding new recipe from a user to json file
 def new_recipe_from_a_user():
   Recipe_to_append_to_json = take_input_recipe_from_user()
-  Check_input_with_user(Recipe_to_append_to_json)
+  Check_input_with_user_and_store_it(Recipe_to_append_to_json)
+
+
 
 
 ###-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 # Start of quick bites
+###----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def _main_():
   
   intro_input = input("\n If you want to see possible recipes based only on what you have in your fridge: Press '1'.\n If you want to cook from the core ingredients, which you already know: Press '2'.\n If you want to store your own recipe for the future usage: Press '3'.\n If you want to quit: Press 'q'\n \n"+Fore.GREEN)
