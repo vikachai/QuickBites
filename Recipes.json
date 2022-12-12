@@ -3734,9 +3734,8 @@
                 "onions",
                 "oil",
                 "chicken",
-                "creme fraiche",
+                "sour cream",
                 "parmesan",
-                "chicken breasts",
                 "bacon",
                 "spinach",
                 "peas"
@@ -5986,6 +5985,74 @@
                 "eggs",
                 "bread",
                 "cheese"
+            ]
+        },
+        {
+            "Id": 288,
+            "Name": "mixed veggies",
+            "Category": "Vegetarian",
+            "Instructions": "1- cut all ingrediants in slices,2- arrange them in an oven tray in layers where potato is on the bottom and tomato on the very top.,3- in a bowl, mix some water with salt, black pepper and olive oil, and add it to the oven tray on top of the vegetables.4- place the tray in the oven at 180 degrees Celecius for 30 minutes,5- serve hot with bread on the side if desirable",
+            "Picture_link": "Not available",
+            "Video_link": "Not available",
+            "Ingredients": [
+                "eggplants",
+                "potatoes",
+                "carrots",
+                "onions",
+                "cauliflower",
+                "tomatoes"
+            ]
+        },
+        {
+            "Id": 289,
+            "Name": "chilly shrimps",
+            "Category": "Seafood",
+            "Instructions": "1- boil the shrips and peel them.2- cut the chillies and garlic in slices.3- cut the ginger after peeling in thin small cubes, or grate it. 4- in a frying pan, place some olive oil and place it on the stove. 5- add the garlic and chilly slices and caramelize them,. 6- add the grated ginger and saute the ingrediants for one minute. 7- add the boiled shrimps and top everything with salt and black pepper, then pan fry for 3-5 min. 8- it can be served with rice on the side or bread. 9- a squeez of lemon on the top is also recommended",
+            "Picture_link": "Not available",
+            "Video_link": "Not available",
+            "Ingredients": [
+                "shrimps",
+                "chilly",
+                "garlic",
+                "ginger"
+            ]
+        },
+        {
+            "Id": 290,
+            "Name": "Bulgur Banadora",
+            "Category": "Vegetarian",
+            "Instructions": "1- wash the bulgur with cold water.2- cut the onions in medium size cubes. 3- in a pot, place some olive oil and bring it to 160 degrees c, add the onion and stir for 8 min. 4- add the Bulgur and stir for another 5 min. 5- make tomato juice from tomatoes,add it with some water, salt and cumin if you have it.6 close the lid on the pot and leave it on low heat for 15-20 min. 7- it can be served with pickles",
+            "Picture_link": "Not available",
+            "Video_link": "Not available",
+            "Ingredients": [
+                "bulgur",
+                "tomatoes",
+                "onions"
+            ]
+        },
+        {
+            "Id": 291,
+            "Name": "Chocolate banana cream",
+            "Category": "Dessert",
+            "Instructions": "Not available",
+            "Picture_link": "Not available",
+            "Video_link": "https://www.youtube.com/watch?v=dq1fv4uEug8",
+            "Ingredients": [
+                "chocolate",
+                "bananas"
+            ]
+        },
+        {
+            "Id": 292,
+            "Name": "potato pancakes",
+            "Category": "Starter",
+            "Instructions": "Not available",
+            "Picture_link": "Not available",
+            "Video_link": "https://www.youtube.com/watch?v=sHbNO8kLnvg",
+            "Ingredients": [
+                "potatoes",
+                "eggs",
+                "onions"
             ]
         }
     ]

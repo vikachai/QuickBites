@@ -1,5 +1,7 @@
 from posixpath import split
 import json
+from colorama import Fore, Style
+
 
 #Getting recipes data from json file:
 with open('Recipes.json', "r", encoding='utf-8') as f:
@@ -36,25 +38,26 @@ def match_recipes_list_to_the_user_list_UserOption1(a_user_list):
 
 #Storing input(products in a user's fridge) in a list
 #Formating this list
-## Not done yet -  add lowercase to input_values
 def take_user_input_UserOption1():
     while True:
-      input_values = input("what's cookin, good lookin. what's edable in your kitchen? ")
+      input_values = input("what's cookin, good lookin. what's edable in your kitchen? \n\n" + Fore.GREEN)
+      print(Style.RESET_ALL)
       if not input_values :
         continue
-      input_values = input_values.split(",")
+      input_values = input_values.lower().split(",")
       formated_input_values = [i.strip() for i in input_values] + ['salt','pepper','oil', 'vinegar', 'water']
       return formated_input_values
 
 # When there are no results for a user, he/she can run the program again
 def try_again():
-  input_try_again = input("\n Would you like to try again? Press 'y' if YES, press 'q' if you want to QUIT.")
+  input_try_again = input("\n Would you like to try again? Press 'y' if YES, press 'q' if you want to QUIT.\n\n" + Fore.GREEN)
+  print(Style.RESET_ALL)
   if input_try_again == 'y' or input_try_again == 'Y':
       _main_()
   elif input_try_again == 'q' or input_try_again == 'Q':
-    return print("\n Come back soon!")
+    return print("\n Come back soon!\n\n")
   else:
-    print("\n Please, follow the instructions:")
+    print("\n Please, follow the instructions:\n\n")
     try_again()
 
 
@@ -74,22 +77,28 @@ def write_json(new_data, filename='Recipes.json'):
 
       ###User Input
 def take_input_recipe_from_user():
-  Name = input("\n What is the Name of your recipe? \n")
-  Ingredients_raw = input("\n List all ingredients for this recipe, separeting by comma \n")
+  Name = input("\n What is the Name of your recipe? \n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
+  Ingredients_raw = input("\n List all ingredients for this recipe, separeting by comma \n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
   Ingredients = Ingredients_raw.split(",")
   Ingredients = [i.strip() for i in Ingredients]
-  Category = input(f"\n Write a Category from existing categories, or write your own.\n Existing Categories: {Set_of_Categories} \n")
-  Instructions_raw = input("\n Write your text instructions here. In case you want to provide only a link to Video instructions -> Press 'v' \n")
+  Category = input(f"\n Write a Category from existing categories, or write your own.\n Existing Categories: {Set_of_Categories} \n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
+  Instructions_raw = input("\n Write your text instructions here. In case you want to provide only a link to Video instructions -> Press 'v'\n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
   if Instructions_raw == "v" or Instructions_raw =="V":
     Instructions = "Not available"
   else:
     Instructions = Instructions_raw
-  Video_link_raw = input("\n Provide a link to video instructions here. If it is not available, press 'n' \n")
+  Video_link_raw = input("\n Provide a link to video instructions here. If it is not available, press 'n' \n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
   if Video_link_raw == "n" or Video_link_raw == "N":
     Video_link = "Not available"
   else:
     Video_link = Video_link_raw
-  Picture_link_raw = input("\n Provide a link to a picture of your dish. If it is not available, press 'n' \n")
+  Picture_link_raw = input("\n Provide a link to a picture of your dish. If it is not available, press 'n' \n \n" + Fore.GREEN)
+  print(Style.RESET_ALL)
   if Picture_link_raw == "n" or Picture_link_raw == "N":
     Picture_link = "Not available"
   else:
@@ -111,14 +120,20 @@ def take_input_recipe_from_user():
 
 ###Function Checking with a user if the provided data by him is correct:
 def Check_input_with_user(user_input):
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------------"+Style.RESET_ALL)
     for key, value in user_input.items():
-      print(f"\n {key}: {value}")
-    check_correct_input = input(f"\n Is this recipe correct? If YES -> Press 'y', if you would like rewrite it -> Press 'r'.\n")
+      print(f"\n {Fore.MAGENTA}{key}:{Style.RESET_ALL} {value}")
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------------"+Style.RESET_ALL)
+    check_correct_input = input(f"\n Is this recipe correct? If YES -> Press 'y', if you would like rewrite it -> Press 'r'.If you want to quit -> Press 'q'.\n \n" +Fore.GREEN)
+    print(Style.RESET_ALL)
     if check_correct_input == "r" or check_correct_input =="R":
       new_recipe_from_a_user()
     elif check_correct_input == "y" or check_correct_input =="Y":
       write_json(user_input)
-      print("\n Your recipe is stored")
+      print("\n Your recipe is stored\n\n")
+    elif check_correct_input == "q" or check_correct_input == "Q":
+      print("Come back soon!\n\n")
+      return
     else: 
       print("\n Please, follow the instructions:")
       Check_input_with_user(user_input)
@@ -134,12 +149,17 @@ def based_on_fridge_recipes():
   else:
     for key,values in output.items():
       print("\n")
-      print(f"Dish Name #{str(key)}: {values['Name'].capitalize()} \n")
-      print("Dish ingredients:" + str(values['Ingredients'])+ "\n")
-      print(f"Video link: {values['Video_link']} \n")
-      print(f"Picture link: {values['Picture_link']} \n")
-      print("Instructions to follow: " + values['Instructions']+ "\n")
+      print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+      print(Style.RESET_ALL)
+      print(f"{Fore.MAGENTA}Dish Name #{str(key)}:{Style.RESET_ALL} {values['Name'].capitalize()} \n")
+      print(Fore.MAGENTA + "Dish ingredients:"+Style.RESET_ALL + str(values['Ingredients'])+ "\n")
+      print(f"{Fore.MAGENTA}Video link:{Style.RESET_ALL} {values['Video_link']} \n")
+      print(f"{Fore.MAGENTA}Picture link:{Style.RESET_ALL} {values['Picture_link']} \n")
+      print(Fore.MAGENTA + "Instructions to follow: " + Style.RESET_ALL+ values['Instructions']+ "\n")
       print("Enjoy your meal.")
+      print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+      print(Style.RESET_ALL)
+
   
 
 #Option 2 - Not done yet:
@@ -157,7 +177,9 @@ def new_recipe_from_a_user():
 
 # Start of quick bites
 def _main_():
-  intro_input = input("\n If you want to see possible recipes based only on what you have in your fridge: Press '1'.\n If you want to cook from the core ingredients, which you already know: Press '2'.\n If you want to store your own recipe for the future usage: Press '3'.\n If you want to quit: Press 'q'\n")
+  
+  intro_input = input("\n If you want to see possible recipes based only on what you have in your fridge: Press '1'.\n If you want to cook from the core ingredients, which you already know: Press '2'.\n If you want to store your own recipe for the future usage: Press '3'.\n If you want to quit: Press 'q'\n \n"+Fore.GREEN)
+  print(Style.RESET_ALL)
   if intro_input == '1' :
     based_on_fridge_recipes()
   elif intro_input == '2' :
@@ -165,10 +187,9 @@ def _main_():
   elif intro_input == '3' :
     new_recipe_from_a_user()
   elif intro_input == 'q' or intro_input == "Q" :
-    return print("\n Come back soon!")
+    return print("\n Come back soon!\n\n")
   else:
-    print("\n Please, follow the instructions:")
+    print("\n Please, follow the instructions:\n\n")
     _main_()
   
 _main_()  
-
