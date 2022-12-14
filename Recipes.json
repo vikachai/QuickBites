@@ -6041,19 +6041,6 @@
                 "chocolate",
                 "bananas"
             ]
-        },
-        {
-            "Id": 292,
-            "Name": "potato pancakes",
-            "Category": "Starter",
-            "Instructions": "Not available",
-            "Picture_link": "Not available",
-            "Video_link": "https://www.youtube.com/watch?v=sHbNO8kLnvg",
-            "Ingredients": [
-                "potatoes",
-                "eggs",
-                "onions"
-            ]
         }
     ]
 }

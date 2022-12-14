@@ -2,8 +2,9 @@ from posixpath import split
 import json
 from colorama import Fore, Style
 
-
-
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#                                                                             Getting recipes data from Json file
+####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Getting recipes data from json file:
 with open('Recipes.json', "r", encoding='utf-8') as f:
@@ -16,6 +17,9 @@ for i in range(len(recipes)):
   List_of_Categories.append(recipes[i]["Category"])
 Set_of_Categories = set(List_of_Categories)
 
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#                                                                                Prep Functions for Option 1
+####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # function to find all recipes, where list of ingredients
 #  can be fully found in provided list of products by a user
 def match_recipes_list_to_the_user_list_UserOption1(a_user_list):
@@ -83,7 +87,7 @@ def take_user_input_UserOption1():
       print("\n Come back soon!\n\n")
       exit()
     else:
-      take_user_input_UserOption1()
+      return take_user_input_UserOption1()
 
 
 
@@ -100,7 +104,33 @@ def try_again():
     print("\n Please, follow the instructions:\n\n")
     try_again()
 
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#                                                                                Prep Functions for Option 2
+####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+#Function to find recipes containing main ingredients, provided by user
+def find_recipes_with_main_ingredient():
+  input_main_ingredients = input("Type your desired main ingredients"+Fore.BLUE+"(through comma, if there are more than one ingredient)\n\n"+Fore.GREEN)
+  print(Style.RESET_ALL)
+  input_main_ingredients = input_main_ingredients.lower().split(",")
+  formated_input_main_ingredients = [i.strip() for i in input_main_ingredients]
+  list_to_offer = []
+  for j in recipes:
+    for i in formated_input_main_ingredients:
+      x = True
+      if i in j["Ingredients"]:
+        continue
+      else:
+        x = False
+        break
+    if x == True:
+      list_to_offer.append(j)
+  return list_to_offer
+
+
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#                                                                                Prep Functions for Option 3
+####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 # function to add to JSON
@@ -178,10 +208,13 @@ def Check_input_with_user_and_store_it(user_input):
       print("\n Please, follow the instructions:")
       Check_input_with_user_and_store_it(user_input)
 
+
+
+
+
 ####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Option 1 :
+#                                                                                 Option 1 :
 ####-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-##Not done yet - to add an option to choose a category?
 def based_on_fridge_recipes():
   input = take_user_input_UserOption1() 
   output = match_recipes_list_to_the_user_list_UserOption1(input)
@@ -204,17 +237,50 @@ def based_on_fridge_recipes():
 
   
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Option 2 - Not done yet:
+#                                                                                 Option 2 
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-def core_ingredients_recipes():
-  pass
+def main_ingredients_recipes():
+  recipes_to_offer_list = find_recipes_with_main_ingredient()
+  print(f"You can cook the following meals using the entered main ingredient : \n\n")
+  for recipe in range(len(recipes_to_offer_list)):
+    print(f"{recipe+1} : {Fore.MAGENTA} {recipes_to_offer_list[recipe]['Name']} {Style.RESET_ALL} {recipes_to_offer_list[recipe]['Ingredients']}\n")
+  meal_choice = int(input(Fore.BLUE + "Please enter the meal index (like 1, 2, 3) to see its recipe: \n\n"+Fore.GREEN))
+  print(Style.RESET_ALL)
+  if meal_choice>0 and meal_choice<len(recipes_to_offer_list)+1:
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+    print(Style.RESET_ALL)
+    print(f"{Fore.MAGENTA}Dish Name #{str(meal_choice)}:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Name'].capitalize()} \n")
+    print(Fore.MAGENTA + "Dish ingredients:"+Style.RESET_ALL + str(recipes_to_offer_list[meal_choice-1]['Ingredients'])+ "\n")
+    print(f"{Fore.MAGENTA}Video link:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Video_link']} \n")
+    print(f"{Fore.MAGENTA}Picture link:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Picture_link']} \n")
+    print(Fore.MAGENTA + "Instructions to follow: " + Style.RESET_ALL+ recipes_to_offer_list[meal_choice-1]['Instructions']+ "\n")
+    print("Enjoy your meal.")
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+    print(Style.RESET_ALL)
+    shoping_list_input = input("To see what you have to buy to cook your dish -> Press 'y'.\nTO quit -> Press 'q'\n\n"+Fore.GREEN)
+    print(Style.RESET_ALL)
+    if shoping_list_input == 'y' or shoping_list_input=='Y':
+      with open('Kitchen_content.txt') as f:
+        content = f.read()
+      kitchen_content = content  
+      kitchen_content = kitchen_content.lower().split(",")
+      formated_kitchen_content = [i.strip() for i in kitchen_content]
+      shoping_list_to_offer = []
+      for ingredient in recipes_to_offer_list[meal_choice-1]['Ingredients']:
+        if ingredient in formated_kitchen_content:
+          continue
+        else:
+          shoping_list_to_offer.append(ingredient)
+      for item in range(len(shoping_list_to_offer)):
+        print(f"\n{item+1} : {shoping_list_to_offer[item]} ") 
+  else:
+    print("There is no such Id in the list\n\n")
+    return try_again()
 
-
-
-
+  
 
 ####----------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Option 3:
+#                                                                                 Option 3:
 ####----------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Adding new recipe from a user to json file
 def new_recipe_from_a_user():
@@ -225,7 +291,7 @@ def new_recipe_from_a_user():
 
 
 ###-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Start of quick bites
+#                                                                             Start of Recipes Finder
 ###----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def _main_():
   
@@ -234,7 +300,7 @@ def _main_():
   if intro_input == '1' :
     based_on_fridge_recipes()
   elif intro_input == '2' :
-    core_ingredients_recipes()
+    main_ingredients_recipes()
   elif intro_input == '3' :
     new_recipe_from_a_user()
   elif intro_input == 'q' or intro_input == "Q" :
@@ -244,3 +310,4 @@ def _main_():
     _main_()
   
 _main_()  
+
