@@ -2,8 +2,9 @@ from posixpath import split
 import json
 from colorama import Fore, Style
 
-
-
+####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#                                                                             Getting recipes data from Json file
+####------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Getting recipes data from json file:
 with open('Recipes.json', "r", encoding='utf-8') as f:
@@ -238,10 +239,43 @@ def based_on_fridge_recipes():
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                                 Option 2 
 ####-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-def core_ingredients_recipes():
-  pass
-
-
+def main_ingredients_recipes():
+  recipes_to_offer_list = find_recipes_with_main_ingredient()
+  print(f"You can cook the following meals using the entered main ingredient : \n\n")
+  for recipe in range(len(recipes_to_offer_list)):
+    print(f"{recipe+1} : {Fore.MAGENTA} {recipes_to_offer_list[recipe]['Name']} {Style.RESET_ALL} {recipes_to_offer_list[recipe]['Ingredients']}\n")
+  meal_choice = int(input(Fore.BLUE + "Please enter the meal index (like 1, 2, 3) to see its recipe: \n\n"+Fore.GREEN))
+  print(Style.RESET_ALL)
+  if meal_choice>0 and meal_choice<len(recipes_to_offer_list)+1:
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+    print(Style.RESET_ALL)
+    print(f"{Fore.MAGENTA}Dish Name #{str(meal_choice)}:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Name'].capitalize()} \n")
+    print(Fore.MAGENTA + "Dish ingredients:"+Style.RESET_ALL + str(recipes_to_offer_list[meal_choice-1]['Ingredients'])+ "\n")
+    print(f"{Fore.MAGENTA}Video link:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Video_link']} \n")
+    print(f"{Fore.MAGENTA}Picture link:{Style.RESET_ALL} {recipes_to_offer_list[meal_choice-1]['Picture_link']} \n")
+    print(Fore.MAGENTA + "Instructions to follow: " + Style.RESET_ALL+ recipes_to_offer_list[meal_choice-1]['Instructions']+ "\n")
+    print("Enjoy your meal.")
+    print(Fore.BLUE + "---------------------------------------------------------------------------------------------")
+    print(Style.RESET_ALL)
+    shoping_list_input = input("To see what you have to buy to cook your dish -> Press 'y'.\nTO quit -> Press 'q'\n\n"+Fore.GREEN)
+    print(Style.RESET_ALL)
+    if shoping_list_input == 'y' or shoping_list_input=='Y':
+      with open('Kitchen_content.txt') as f:
+        content = f.read()
+      kitchen_content = content  
+      kitchen_content = kitchen_content.lower().split(",")
+      formated_kitchen_content = [i.strip() for i in kitchen_content]
+      shoping_list_to_offer = []
+      for ingredient in recipes_to_offer_list[meal_choice-1]['Ingredients']:
+        if ingredient in formated_kitchen_content:
+          continue
+        else:
+          shoping_list_to_offer.append(ingredient)
+      for item in range(len(shoping_list_to_offer)):
+        print(f"\n{item+1} : {shoping_list_to_offer[item]} ") 
+  else:
+    print("There is no such Id in the list\n\n")
+    return try_again()
 
   
 
@@ -276,3 +310,4 @@ def _main_():
     _main_()
   
 _main_()  
+
